@@ -14,8 +14,9 @@ public class Player : MonoBehaviour
 
     // Private
     private Rigidbody rb;
-    private bool isGrounded;
+    public bool isGrounded;
     private Vector3 movement;
+    public int jumpsRemaining = 2;
 
     void Start()
     {
@@ -29,9 +30,17 @@ public class Player : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         movement = new Vector3(h, 0f, 0f) * movementSpeed;
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump"))
         {
-            Jump();
+            if (isGrounded)
+            {
+                jumpsRemaining = 2;
+            }
+            if (jumpsRemaining > 0)
+            {
+                jumpsRemaining--;
+                Jump();
+            }
         }
     }
 
@@ -49,13 +58,5 @@ public class Player : MonoBehaviour
     {
         rb.AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.Impulse);
         isGrounded = false;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-        {
-            isGrounded = true;
-        }
     }
 }

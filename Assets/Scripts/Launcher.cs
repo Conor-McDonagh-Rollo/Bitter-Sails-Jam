@@ -6,7 +6,8 @@ public class Launcher : MonoBehaviour
 {
     // Object To Launch + Properties
     public GameObject objectPrefab; 
-    public float launchPower = 10f; 
+    public float launchPower = 10f;
+    public float launchDamp = 10f;
     public Transform launchPoint; // Point at which we launch from
 
     // Visualization
@@ -88,7 +89,7 @@ public class Launcher : MonoBehaviour
         if (currentObjectRigidbody != null)
         {
             Vector3 dragVector = initialMousePosition - currentMousePosition;
-            Vector3 launchDirection = new Vector3(dragVector.x, dragVector.z, 0).normalized;
+            Vector3 launchDirection = new Vector3(dragVector.x, dragVector.z, 0) / launchDamp;
 
             currentObjectRigidbody.AddForce(launchDirection * launchPower, ForceMode.Impulse);
         }
@@ -100,7 +101,7 @@ public class Launcher : MonoBehaviour
         if (currentObjectToLaunch == null) return;
 
         Vector3 dragVector = initialMousePosition - currentMousePosition;
-        Vector3 launchDirection = new Vector3(dragVector.x, dragVector.z, 0).normalized; 
+        Vector3 launchDirection = new Vector3(dragVector.x, dragVector.z, 0) / launchDamp; 
 
         for (int i = 0; i < trajectoryPoints; i++)
         {

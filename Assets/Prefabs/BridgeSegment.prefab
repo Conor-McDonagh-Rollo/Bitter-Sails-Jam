@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 5986031558915116479}
   - component: {fileID: 4840428416104166589}
   - component: {fileID: 4092767697375840887}
-  - component: {fileID: 3318293403935050166}
   m_Layer: 6
   m_Name: BridgeSegment
   m_TagString: Untagged
@@ -134,18 +133,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 56
   m_CollisionDetection: 0
---- !u!138 &3318293403935050166
-FixedJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6214812093866651825}
-  m_ConnectedBody: {fileID: 0}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1

@@ -5,10 +5,11 @@ using UnityEngine;
 public class Launcher : MonoBehaviour
 {
     // Object To Launch + Properties
-    public GameObject objectPrefab; 
+    public GameObject objectPrefab;
     public float launchPower = 10f;
     public float launchDamp = 10f;
     public Transform launchPoint; // Point at which we launch from
+    public AudioClip launchSound;
 
     // Visualization
     public LineRenderer trajectoryLineRenderer; 
@@ -88,6 +89,9 @@ public class Launcher : MonoBehaviour
     {
         if (currentObjectRigidbody != null)
         {
+            Player.audioSource.pitch = 1f;
+            Player.audioSource.PlayOneShot(launchSound);
+
             Vector3 dragVector = initialMousePosition - currentMousePosition;
             Vector3 launchDirection = new Vector3(dragVector.x, dragVector.z, 0) / launchDamp;
 

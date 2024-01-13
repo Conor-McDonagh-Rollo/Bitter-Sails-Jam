@@ -18,9 +18,13 @@ public class Player : MonoBehaviour
     private Vector3 movement;
     public int jumpsRemaining = 2;
 
+    // Static
+    public static AudioSource audioSource;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()

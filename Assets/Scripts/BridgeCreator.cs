@@ -8,22 +8,20 @@ public class BridgeCreator : MonoBehaviour
     public Transform bridge_end;
     public GameObject bridge_segment_prefab;
     public GameObject bridge_hinge_prefab;
+    public GameObject poof_ps_prefab;
+    public GameObject explode_ps_prefab;
     public float segment_spacing;
     public float time_between_segments;
 
-    bool hit = false;
-    ParticleSystem other_ps = null;
+    // Audio stuff
+    public AudioClip bridge_building;
+    public AudioClip bridge_completed;
 
-    void Update()
+    Animator anim;
+
+    private void Start()
     {
-        if (hit)
-        {
-            if (!other_ps.isPlaying) // Is ps finished playing
-            {
-                Destroy(other_ps.gameObject); // then destroy
-                hit = false;
-            }
-        }
+        anim = GetComponent<Animator>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,10 +29,9 @@ public class BridgeCreator : MonoBehaviour
         if (other.CompareTag("Arrow")) // If we hit the target, start making the bridge
         {
             other.gameObject.GetComponent<Rigidbody>().Sleep();
-            other_ps = other.gameObject.GetComponent<ParticleSystem>();
-            GetComponent<MeshRenderer>().enabled = false;
-            other_ps.Play();
-            hit = true;
+            Instantiate(explode_ps_prefab, other.transform.position, Quaternion.identity);
+            Destroy(other.gameObject);
+            anim.Play("spin");
             StartCoroutine(CreateBridge());
         }
     }
@@ -55,8 +52,14 @@ public class BridgeCreator : MonoBehaviour
         List<Rigidbody> hinge_rbs = new List<Rigidbody>();// Keep track of which rbs to set kinematic back to false on
         List<GameObject> second_hinges = new List<GameObject>(); // Each hinge needs a second hinge so its connected to both sides of segments
 
+        float audio_step = 2f / numberOfSegments;
+        Player.audioSource.pitch = 1f;
+
         for (int i = 0; i < numberOfSegments; i++)
         {
+            Player.audioSource.PlayOneShot(bridge_building);
+            Player.audioSource.pitch += audio_step;
+
             Vector3 position = bridge_start.position + 
                                directionToEnd * 
                                (bridge_segment_prefab.transform.localScale.x + segment_spacing) * i; // Position of the segment
@@ -71,11 +74,11 @@ public class BridgeCreator : MonoBehaviour
 
             HingeJoint segment_hinge1 = Instantiate(bridge_hinge_prefab,
                                                     position,
-                                                    Quaternion.Euler(0, 0, 90),
+                                                    Quaternion.identity,
                                                     bridge_go.transform).AddComponent<HingeJoint>();
             HingeJoint segment_hinge2 = Instantiate(bridge_hinge_prefab,
                                                     position,
-                                                    Quaternion.Euler(0, 0, 90),
+                                                    Quaternion.identity,
                                                     bridge_go.transform).AddComponent<HingeJoint>(); // Instatiate both sides of the hinge
 
             hinge_rbs.Add(segment_hinge1.GetComponent<Rigidbody>());
@@ -151,5 +154,15 @@ public class BridgeCreator : MonoBehaviour
         {
             hinge_rbs[i].isKinematic = false;
         }
+
+        Player.audioSource.PlayOneShot(bridge_completed);
+
+        Instantiate(poof_ps_prefab, transform.position, Quaternion.identity);
+        Destroy(transform.parent.gameObject);
+    }
+
+    public void StartBridge()
+    {
+        StartCoroutine(CreateBridge());
     }
 }

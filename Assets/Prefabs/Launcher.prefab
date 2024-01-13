@@ -174,7 +174,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 18.87, y: 7.99, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2124512592670299642}
@@ -187,7 +187,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5832765588704968388}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 5549417375118411972, guid: e722f135d26c79d4c9b76e05df513ef3, type: 3}
 --- !u!23 &2489715656277869688
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -208,7 +208,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 39156a100a4b5474a873dcfa479aa8db, type: 2}
+  - {fileID: 2100000, guid: 0d04e40c3294d1f4cbb086cfd8b3b77f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -244,7 +244,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectPrefab: {fileID: 2461052753802573593, guid: 2f0afceb385e2084e8fa8fe143d7b555, type: 3}
   launchPower: 15
+  launchDamp: 150
   launchPoint: {fileID: 2124512592670299642}
+  launchSound: {fileID: 8300000, guid: 1f890369d2af224409fa071782b3cbf7, type: 3}
   trajectoryLineRenderer: {fileID: 2958577078063503570}
   trajectoryPoints: 30
   detectionRadius: 1
@@ -276,7 +278,7 @@ Transform:
   m_GameObject: {fileID: 8797384005097129242}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.57, y: 0.52, z: 0}
+  m_LocalPosition: {x: 0.7, y: 0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

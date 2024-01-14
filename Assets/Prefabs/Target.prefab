@@ -418,6 +418,9 @@ MonoBehaviour:
   time_between_segments: 0.2
   bridge_building: {fileID: 8300000, guid: 13fbe6dc59f3e16419dbf8e5bd07ea70, type: 3}
   bridge_completed: {fileID: 8300000, guid: 2d7966feeaf33604091894019f4cef94, type: 3}
+  cannonball_break: {fileID: 8300000, guid: f29fee8c215c0ac4bb7e2cd78a66051e, type: 3}
+  target_spin: {fileID: 8300000, guid: 17cbf0808b7845b46af3c92142b739b7, type: 3}
+  poof: {fileID: 8300000, guid: ae4ceb098188a6e47ace389b6c2f924b, type: 3}
 --- !u!95 &1399317948507572124
 Animator:
   serializedVersion: 5

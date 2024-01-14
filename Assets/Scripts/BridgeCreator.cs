@@ -16,6 +16,9 @@ public class BridgeCreator : MonoBehaviour
     // Audio stuff
     public AudioClip bridge_building;
     public AudioClip bridge_completed;
+    public AudioClip cannonball_break;
+    public AudioClip target_spin;
+    public AudioClip poof;
 
     Animator anim;
 
@@ -30,8 +33,10 @@ public class BridgeCreator : MonoBehaviour
         {
             other.gameObject.GetComponent<Rigidbody>().Sleep();
             Instantiate(explode_ps_prefab, other.transform.position, Quaternion.identity);
+            Player.audioSource.PlayOneShot(cannonball_break);
             Destroy(other.gameObject);
             anim.Play("spin");
+            Player.audioSource.PlayOneShot(target_spin);
             StartCoroutine(CreateBridge());
         }
     }
@@ -40,6 +45,7 @@ public class BridgeCreator : MonoBehaviour
     {
         yield return new WaitForSeconds(time_between_segments);
         Vector3 directionToEnd = (bridge_end.position - bridge_start.position).normalized; // Direction to instatiate objects
+        Quaternion rotationFromDirection = Quaternion.FromToRotation(Vector3.right, directionToEnd);
         float distanceToEnd = Vector3.Distance(bridge_start.position, bridge_end.position); // Distance for number of segments
         int numberOfSegments = Mathf.CeilToInt(distanceToEnd / 
             (bridge_segment_prefab.transform.localScale.x + segment_spacing)); // calculate the number of segments needed
@@ -66,7 +72,7 @@ public class BridgeCreator : MonoBehaviour
 
             GameObject segment = Instantiate(bridge_segment_prefab, 
                                  position, 
-                                 Quaternion.identity, 
+                                 rotationFromDirection, 
                                  bridge_go.transform); // Instantiate the segment
 
             Rigidbody rb = segment.GetComponent<Rigidbody>();
@@ -74,11 +80,11 @@ public class BridgeCreator : MonoBehaviour
 
             HingeJoint segment_hinge1 = Instantiate(bridge_hinge_prefab,
                                                     position,
-                                                    Quaternion.identity,
+                                                    rotationFromDirection,
                                                     bridge_go.transform).AddComponent<HingeJoint>();
             HingeJoint segment_hinge2 = Instantiate(bridge_hinge_prefab,
                                                     position,
-                                                    Quaternion.identity,
+                                                    rotationFromDirection,
                                                     bridge_go.transform).AddComponent<HingeJoint>(); // Instatiate both sides of the hinge
 
             hinge_rbs.Add(segment_hinge1.GetComponent<Rigidbody>());
@@ -88,12 +94,12 @@ public class BridgeCreator : MonoBehaviour
 
             segment_hinge1.transform.position += new Vector3(directionToEnd.x * 
                                                             (bridge_segment_prefab.transform.localScale.x / 2f) * 1.5f
-                                                            , 0
+                                                            , -0.25f
                                                             , -0.5f);
             segment_hinge2.transform.position += new Vector3(directionToEnd.x * 
                                                             (bridge_segment_prefab.transform.localScale.x / 2f) * 1.5f
-                                                            , 0
-                                                            , 0.5f); // Position the hinges so they look like they connect the segments
+                                                            , -0.25f
+                                                            , 0.3f); // Position the hinges so they look like they connect the segments
             
             ///////// Set the connected body and the joint limits of the first hinges /////////
             segment_hinge1.connectedBody = rb;
@@ -156,6 +162,8 @@ public class BridgeCreator : MonoBehaviour
         }
 
         Player.audioSource.PlayOneShot(bridge_completed);
+        Player.audioSource.pitch = 1f;
+        Player.audioSource.PlayOneShot(poof);
 
         Instantiate(poof_ps_prefab, transform.position, Quaternion.identity);
         Destroy(transform.parent.gameObject);

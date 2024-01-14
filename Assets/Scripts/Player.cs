@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
 
     // Static
     public static AudioSource audioSource;
+    public static bool freeze = false;
 
     void Start()
     {
@@ -49,8 +50,16 @@ public class Player : MonoBehaviour
             audioSource.PlayOneShot(player_land);
         }
 
-        float h = Input.GetAxis("Horizontal");
-        movement = new Vector3(h, 0f, 0f) * movementSpeed;
+        if (!freeze)
+        {
+            float h = Input.GetAxis("Horizontal");
+            movement = new Vector3(h, 0f, 0f) * movementSpeed;
+        }
+        else
+        {
+            movement = Vector3.zero;
+        }
+
         if (movement.x > 0f || movement.x < 0f)
         {
             anim.SetBool("Walking", true);
@@ -69,7 +78,7 @@ public class Player : MonoBehaviour
             rot_anim.SetInteger("dir", 0);
         }
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && !freeze)
         {
             if (isGrounded)
             {
